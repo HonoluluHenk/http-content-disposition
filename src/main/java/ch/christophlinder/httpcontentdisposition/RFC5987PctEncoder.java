@@ -18,6 +18,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * </p>
  */
 public class RFC5987PctEncoder {
+	private final RFC5234CharacterRules characterRules = RFC5234CharacterRules.getInstance();
+
 	// From RFC5987, Section 3.2
 	// https://tools.ietf.org/html/rfc5987#section-3.2
 	/*
@@ -44,21 +46,9 @@ public class RFC5987PctEncoder {
 		}
 		char asciiLikeChar = charInASCIIRange(codepointChars);
 
-		boolean result = isALPHA(asciiLikeChar);
-		result |= isDIGIT(asciiLikeChar);
+		boolean result = characterRules.isALPHA(asciiLikeChar);
+		result |= characterRules.isDIGIT(asciiLikeChar);
 		result |= isAttrCharSpecial(asciiLikeChar);
-
-		return result;
-	}
-
-	private boolean isALPHA(char c) {
-		var result = (('a' <= c) && (c <= 'z')) || (('A' <= c) && c <= 'Z');
-
-		return result;
-	}
-
-	private boolean isDIGIT(char c) {
-		boolean result = '0' <= c && c <= '9';
 
 		return result;
 	}

@@ -1,10 +1,5 @@
 package ch.christophlinder.httpcontentdisposition;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,11 +7,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import static java.util.stream.Stream.concat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
-class RFC5987PctEncoderTest {
+public class RFC5987PctEncoderTest {
 	private final RFC5987PctEncoder encoder = new RFC5987PctEncoder();
 
 	@Test
