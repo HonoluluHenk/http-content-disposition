@@ -1,10 +1,9 @@
-package ch.christophlinder.httpcontentdisposition;
+package ch.christophlinder.httpcontentdisposition.rules;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
@@ -12,12 +11,12 @@ import java.util.stream.Stream;
 
 import static ch.christophlinder.httpcontentdisposition.helpers.Helpers.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-@SuppressWarnings("ClassCanBeStatic")
 class RFC5234CharacterRulesTest {
-    private final RFC5234CharacterRules rules = new RFC5234CharacterRules();
+    private final RFC5234CharacterRules rules = RFC5234CharacterRules.getInstance();
 
     @Nested
     class InstantiationTest {
@@ -35,83 +34,42 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class StartsWithTest {
-        @Test
-        void shouldThrowOnNull() {
-            //noinspection ConstantConditions
-            assertThrows(NullPointerException.class,
-                    () -> rules.startsWith(null, ignored -> true)
-            );
-        }
-
-        @Test
-        void shouldRejectEmptyString() {
-            boolean actual = rules.startsWith("", ignored -> true);
-
-            assertThat(actual)
-                    .isFalse();
-        }
-
-        @ParameterizedTest
-        @CsvSource({
-                "a,true",
-                "aa,true",
-                "aaa,true",
-                "ab,true",
-                "abc,true",
-                "b,false",
-                "ba,false",
-        })
-        void shouldReturnPredicateOtherwise(String input, boolean expected) {
-            boolean actual = rules.startsWith(input, c -> c == 'a');
-
-            assertThat(actual)
-                    .isEqualTo(expected);
-
-        }
-    }
-
-    @Nested
     @TestInstance(PER_CLASS)
-    class ALPHATest extends GenericPredicate {
+    class ALPHATest extends GenericPredicate<RFC5234CharacterRules> {
         ALPHATest() {
             super(rules,
                     RFC5234CharacterRules::isALPHA,
-                    RFC5234CharacterRules::startsWithALPHA,
                     concat(charRange('a', 'z'), charRange('A', 'Z'))
             );
         }
     }
 
     @Nested
-    class BITTest extends GenericPredicate {
+    class BITTest extends GenericPredicate<RFC5234CharacterRules> {
         BITTest() {
             super(rules,
                     RFC5234CharacterRules::isBIT,
-                    RFC5234CharacterRules::startsWithBIT,
-                    characters('0', '1')
+                    chars('0', '1')
             );
         }
     }
 
     @Nested
-    class CHARTest extends GenericPredicate {
+    class CHARTest extends GenericPredicate<RFC5234CharacterRules> {
         CHARTest() {
             super(rules,
                     RFC5234CharacterRules::isCHAR,
-                    RFC5234CharacterRules::startsWithCHAR,
                     charRange((char) 0x01, (char) 0x7F));
         }
     }
 
     @Nested
-    class CRTest extends GenericPredicate {
+    class CRTest extends GenericPredicate<RFC5234CharacterRules> {
         CRTest() {
             super(
                     rules,
                     RFC5234CharacterRules::isCR,
-                    RFC5234CharacterRules::startsWithCR,
-                    characters('\r')
+                    chars('\r')
             );
         }
     }
@@ -135,93 +93,72 @@ class RFC5234CharacterRulesTest {
         }
 
         @Test
-        void startWithShouldAcceptCRLF() {
-            assertTrue(rules.startsWithCRLF("\r\nHello World"));
-        }
-
-        @ParameterizedTest
-        @MethodSource("illegal")
-        void startWithShouldRejectIllegal(String input) {
-            assertFalse(rules.startsWithCRLF(input));
-        }
-
-        @ParameterizedTest
-        @MethodSource("illegal")
-        void startWithShouldRejectIllegalPlus(String input) {
-            assertFalse(rules.startsWithCRLF(input + "xxx"));
-        }
-
-        @Test
-        void startWithShouldCallBasicFunction() {
+        void charSequenceShouldCallBasicFunction() {
             var rulesSpy = Mockito.spy(rules);
-            rulesSpy.startsWithCRLF("asdf");
 
-            Mockito.verify(rulesSpy).isCRLF("as");
+            rulesSpy.isCRLF("xy");
+
+            Mockito.verify(rulesSpy).isCRLF(new char[]{'x', 'y'});
         }
+
     }
 
     @Nested
-    class CTLTest extends GenericPredicate {
+    class CTLTest extends GenericPredicate<RFC5234CharacterRules> {
         CTLTest() {
             super(rules,
                     RFC5234CharacterRules::isCTL,
-                    RFC5234CharacterRules::startsWithCTL,
-                    concat(charRange(0x00, 0x1F), characters(0x7F))
+                    concat(codePointRange(0x00, 0x1F), codePoints(0x7F))
             );
         }
     }
 
     @Nested
-    class DIGITTest extends GenericPredicate {
+    class DIGITTest extends GenericPredicate<RFC5234CharacterRules> {
         DIGITTest() {
             super(rules,
                     RFC5234CharacterRules::isDIGIT,
-                    RFC5234CharacterRules::startsWithDIGIT,
                     charRange('0', '9')
             );
         }
     }
 
     @Nested
-    class DQUOTETest extends GenericPredicate {
+    class DQUOTETest extends GenericPredicate<RFC5234CharacterRules> {
         DQUOTETest() {
             super(rules,
                     RFC5234CharacterRules::isDQUOTE,
-                    RFC5234CharacterRules::startsWithDQUOTE,
-                    characters('"')
+                    chars('"')
             );
         }
     }
 
     @Nested
-    class HEXDIGTest extends GenericPredicate {
+    class HEXDIGTest extends GenericPredicate<RFC5234CharacterRules> {
         HEXDIGTest() {
             super(rules,
                     RFC5234CharacterRules::isHEXDIG,
-                    RFC5234CharacterRules::startsWithHEXDIG,
-                    characters('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'A', 'B', 'C', 'D', 'E', 'F')
+                    chars('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'A', 'B', 'C', 'D', 'E', 'F')
             );
         }
     }
 
     @Nested
-    class HTABTest extends GenericPredicate {
+    class HTABTest extends GenericPredicate<RFC5234CharacterRules> {
         HTABTest() {
             super(rules,
                     RFC5234CharacterRules::isHTAB,
-                    RFC5234CharacterRules::startsWithHTAB,
-                    characters('\t')
+                    chars('\t')
             );
         }
     }
 
     @Nested
-    class LFTest extends GenericPredicate {
+    class LFTest extends GenericPredicate<RFC5234CharacterRules> {
         LFTest() {
             super(rules,
                     RFC5234CharacterRules::isLF,
-                    RFC5234CharacterRules::startsWithLF,
-                    characters('\n')
+                    chars('\n')
             );
         }
     }
@@ -271,23 +208,6 @@ class RFC5234CharacterRulesTest {
             );
         }
 
-        Stream<String> startsWithAllowed() {
-            return Stream.concat(
-                    Stream.of(
-                            "  aa",
-                            " \taa",
-                            " \r\naa",
-                            "\t aa",
-                            "\t\taa",
-                            "\t\r\naa",
-                            "\r\n\r\naa",
-                            "\r\n aa",
-                            "\r\n\taa"
-                    ),
-                    lwsPlusOthers()
-                    );
-        }
-
         @ParameterizedTest
         @MethodSource("allowedChars")
         void shouldAcceptLWSPChars(String input) {
@@ -300,55 +220,45 @@ class RFC5234CharacterRulesTest {
             assertFalse(rules.isLWSP(input));
         }
 
-        @ParameterizedTest
-        @MethodSource("startsWithAllowed")
-        void startWithShouldAccept(String input) {
-            assertTrue(rules.startsWithLWSP(input));
-        }
-
     }
 
     @Nested
-    class OCTETTest extends GenericPredicate {
+    class OCTETTest extends GenericPredicate<RFC5234CharacterRules> {
         OCTETTest() {
             super(rules,
                     RFC5234CharacterRules::isOCTET,
-                    RFC5234CharacterRules::startsWithOCTET,
-                    charRange(0x00, 0xFF),
-                    characters(0xFF + 1)
+                    codePointRange(0x00, 0xFF),
+                    codePoints(0xFF + 1)
             );
         }
     }
 
     @Nested
-    class SPTest extends GenericPredicate {
+    class SPTest extends GenericPredicate<RFC5234CharacterRules> {
         SPTest() {
             super(rules,
                     RFC5234CharacterRules::isSP,
-                    RFC5234CharacterRules::startsWithSP,
-                    characters(' ')
+                    chars(' ')
             );
         }
     }
 
     @Nested
-    class VCHARTest extends GenericPredicate {
+    class VCHARTest extends GenericPredicate<RFC5234CharacterRules> {
         VCHARTest() {
             super(rules,
                     RFC5234CharacterRules::isVCHAR,
-                    RFC5234CharacterRules::startsWithVCHAR,
                     charRange('!', '~')
             );
         }
     }
 
     @Nested
-    class WSPTest extends GenericPredicate {
+    class WSPTest extends GenericPredicate<RFC5234CharacterRules> {
         WSPTest() {
             super(rules,
                     RFC5234CharacterRules::isWSP,
-                    RFC5234CharacterRules::startsWithWSP,
-                    characters(' ', '\t')
+                    chars(' ', '\t')
             );
         }
     }

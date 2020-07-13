@@ -13,19 +13,27 @@ public final class Helpers {
                 .mapToObj(CharInput::new);
     }
 
-    public static Stream<CharInput> charRange(int startInclusive, int endInclusive) {
-        return charRange((char)startInclusive, (char)endInclusive);
+    public static Stream<CharInput> codePointRange(int startInclusive, int endInclusive) {
+        return charRange((char) startInclusive, (char) endInclusive);
     }
 
-    public static Stream<CharInput> characters(char ... chars) {
+    public static Stream<CharInput> chars(char... chars) {
         // :)
         return new String(chars)
                 .chars()
                 .mapToObj(CharInput::new);
     }
 
-    public static Stream<CharInput> characters(int ... chars) {
-        return IntStream.of(chars)
+    public static Stream<CharInput> codePoints(int... codePoints) {
+        return IntStream.of(codePoints)
+                .mapToObj(CharInput::new);
+    }
+
+    /**
+     * Characters in range: [0 - 255]
+     */
+    public static Stream<CharInput> latin1() {
+        return IntStream.rangeClosed(0, 255)
                 .mapToObj(CharInput::new);
     }
 
@@ -34,14 +42,6 @@ public final class Helpers {
      */
     public static Stream<CharInput> ascii() {
         return IntStream.rangeClosed(0, 127)
-                .mapToObj(CharInput::new);
-    }
-
-    /**
-     * Characters in range: [0 - 255]
-     */
-    public static Stream<CharInput> asciiExtended() {
-        return IntStream.rangeClosed(0, 255)
                 .mapToObj(CharInput::new);
     }
 
@@ -62,7 +62,7 @@ public final class Helpers {
 
     public static Stream<CharInput> inverse(Stream<CharInput> allowed) {
         return allExcept(
-                asciiExtended(),
+                latin1(),
                 allowed
         );
     }

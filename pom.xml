@@ -3,9 +3,11 @@
 		 xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>ch.christophlinder</groupId>
 	<artifactId>http-content-disposition</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
+
 	<properties>
 		<maven.compiler.source>14</maven.compiler.source>
 		<maven.compiler.target>14</maven.compiler.target>
@@ -33,6 +35,17 @@
 			<artifactId>spotbugs-annotations</artifactId>
 			<version>4.0.6</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>1.6.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
+			<version>1.6.5</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
