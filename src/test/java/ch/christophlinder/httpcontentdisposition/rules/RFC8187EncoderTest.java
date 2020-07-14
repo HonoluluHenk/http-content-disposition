@@ -26,7 +26,7 @@ public class RFC8187EncoderTest {
         var actual = encoder.encodeExtValue("");
 
         assertThat(actual)
-                .isEqualTo(new RFC8187Encoded("UTF-8''", false));
+                .isEqualTo(new Encoded("UTF-8''", false));
     }
 
     @Test
@@ -34,7 +34,7 @@ public class RFC8187EncoderTest {
         var actual = encoder.encodeExtValue("\"");
 
         assertThat(actual)
-                .isEqualTo(new RFC8187Encoded("UTF-8''%22", true));
+                .isEqualTo(new Encoded("UTF-8''%22", true));
     }
 
     @Nested
@@ -60,17 +60,12 @@ public class RFC8187EncoderTest {
     @TestInstance(PER_CLASS)
     class SingleCharacterAsciiRangeTest {
         Stream<Character> allowedChars() {
-            return allExcept(
-                    ascii(),
-                    concat(
-                            chars('*', '\'', '%'), // explicitly statet in RFC
-                            chars(' '), // SPACE
-                            charRange((char) 0, (char) 31), //CTLs
-                            chars((char) 127), // CTLs
-                            chars('(', ')', '<', '>', '@',
-                                    ',', ';', ':', '\\', '"',
-                                    '/', '[', ']', '?', '=') // tspecials
-                    )
+            return concat(
+                            charRange('a', 'z'),
+                            charRange('A', 'Z'),
+                            charRange('0', '9'),
+                            chars('!', '#', '$', '&', '+', '-', '.',
+                                    '^', '_', '`', '|', '~')
             ).map(CharInput::getCharacter);
         }
 
@@ -79,10 +74,10 @@ public class RFC8187EncoderTest {
         void shouldNotEscapeCharsDigitsSpecials(Character c) {
             String input = String.valueOf(c);
 
-            RFC8187Encoded actual = encoder.encodeExtValue(input);
+            Encoded actual = encoder.encodeExtValue(input);
 
             assertThat(actual)
-                    .isEqualTo(new RFC8187Encoded("UTF-8''" + input, false));
+                    .isEqualTo(new Encoded("UTF-8''" + input, false));
         }
 
         @Test
@@ -95,7 +90,7 @@ public class RFC8187EncoderTest {
                 }
 
                 String input = String.valueOf(c);
-                RFC8187Encoded actual = encoder.encodeExtValue(input);
+                Encoded actual = encoder.encodeExtValue(input);
 
                 assertThat(actual.getValue())
                         .describedAs("Character: " + c + ", name: " + Character.getName(c))
@@ -111,38 +106,38 @@ public class RFC8187EncoderTest {
         @Test
         void shouldNotEncodeCharacterInLowAsciiRange() {
             // ascii: 97 = 0x61
-            RFC8187Encoded actual = encoder.encodeExtValue("a");
+            Encoded actual = encoder.encodeExtValue("a");
 
             assertThat(actual)
-                    .isEqualTo(new RFC8187Encoded("UTF-8''a", false));
+                    .isEqualTo(new Encoded("UTF-8''a", false));
         }
 
         @Test
         void shouldEncodeCharacterInHighAsciiRange() {
             // iso-8859-1: 246 = 0xF6
-            RFC8187Encoded actual = encoder.encodeExtValue("ö");
+            Encoded actual = encoder.encodeExtValue("ö");
 
             assertThat(actual)
-                    .isEqualTo(new RFC8187Encoded("UTF-8''%C3%B6", true));
+                    .isEqualTo(new Encoded("UTF-8''%C3%B6", true));
         }
 
         @Test
         void shouldEncode3ByteUTFChar() {
             // codepoint: 8364 = 0x20AC
-            RFC8187Encoded actual = encoder.encodeExtValue("€");
+            Encoded actual = encoder.encodeExtValue("€");
 
             assertThat(actual)
-                    .isEqualTo(new RFC8187Encoded("UTF-8''%E2%82%AC", true));
+                    .isEqualTo(new Encoded("UTF-8''%E2%82%AC", true));
         }
 
         @Test
         void shouldEncode4ByteUTFChar() {
             String string = Character.toString(194564);
 
-            RFC8187Encoded actual = encoder.encodeExtValue(string);
+            Encoded actual = encoder.encodeExtValue(string);
 
             assertThat(actual)
-                    .isEqualTo(new RFC8187Encoded("UTF-8''%F0%AF%A0%84", true));
+                    .isEqualTo(new Encoded("UTF-8''%F0%AF%A0%84", true));
         }
     }
 
@@ -159,10 +154,10 @@ public class RFC8187EncoderTest {
             "€, UTF-8''%E2%82%AC",
     })
     void shouldHandleSomeRandomStrings(String in, String expected) {
-        RFC8187Encoded actual = encoder.encodeExtValue(in);
+        Encoded actual = encoder.encodeExtValue(in);
 
         assertThat(actual)
-                .isEqualTo(new RFC8187Encoded(expected, true));
+                .isEqualTo(new Encoded(expected, true));
     }
 
     @Nested

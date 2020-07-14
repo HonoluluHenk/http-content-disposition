@@ -10,7 +10,7 @@ class RFC5987CharacterRulesTest {
     private final RFC5987CharacterRules rules = RFC5987CharacterRules.getInstance();
 
     @Nested
-    class AttrCharTest extends GenericPredicate<RFC5987CharacterRules> {
+    class AttrCharTest extends GenericRuleTestSuite<RFC5987CharacterRules> {
         
         AttrCharTest() {
             super(rules,

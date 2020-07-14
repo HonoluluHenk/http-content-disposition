@@ -16,14 +16,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @TestInstance(PER_CLASS)
-public abstract class GenericPredicate<Rules> {
+public abstract class GenericRuleTestSuite<Rules> {
     private final Rules rules;
     private final BiFunction<Rules, Character, Boolean> predicate;
 
     private final List<CharInput> allowed;
     private final List<CharInput> forbidden;
 
-    public GenericPredicate(
+    public GenericRuleTestSuite(
             Rules rules,
             BiFunction<Rules, Character, Boolean> predicate,
             Stream<CharInput> allowed,
@@ -37,7 +37,7 @@ public abstract class GenericPredicate<Rules> {
                 : inverse(this.allowed.stream()).collect(Collectors.toList());
     }
 
-    public GenericPredicate(
+    public GenericRuleTestSuite(
             Rules rules,
             BiFunction<Rules, Character, Boolean> predicate,
             Stream<CharInput> allowed

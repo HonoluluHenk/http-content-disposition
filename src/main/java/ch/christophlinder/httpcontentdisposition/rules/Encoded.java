@@ -4,11 +4,11 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class RFC8187Encoded {
+public class Encoded {
     private final String value;
     private final boolean isEncoded;
 
-    RFC8187Encoded(String value, boolean isEncoded) {
+    Encoded(String value, boolean isEncoded) {
         this.value = requireNonNull(value);
         this.isEncoded = isEncoded;
     }
@@ -39,7 +39,7 @@ public class RFC8187Encoded {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RFC8187Encoded other = (RFC8187Encoded) o;
+        Encoded other = (Encoded) o;
         return isEncoded == other.isEncoded
                 && value.equals(other.value);
     }

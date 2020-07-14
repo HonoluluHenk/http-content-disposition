@@ -14,7 +14,7 @@ class RFC2616CharacterRulesTest {
     private final RFC2616CharacterRules rules = RFC2616CharacterRules.getInstance();
 
     @Nested
-    class OCTETTest extends GenericPredicate<RFC2616CharacterRules> {
+    class OCTETTest extends GenericRuleTestSuite<RFC2616CharacterRules> {
         OCTETTest() {
             super(
                     rules,
@@ -30,7 +30,7 @@ class RFC2616CharacterRulesTest {
     }
 
     @Nested
-    class CHARTest extends GenericPredicate<RFC2616CharacterRules> {
+    class CHARTest extends GenericRuleTestSuite<RFC2616CharacterRules> {
         CHARTest() {
             super(
                     rules,
@@ -41,7 +41,7 @@ class RFC2616CharacterRulesTest {
     }
 
     @Nested
-    class CTLTest extends GenericPredicate<RFC2616CharacterRules> {
+    class CTLTest extends GenericRuleTestSuite<RFC2616CharacterRules> {
         CTLTest() {
             super(
                     rules,
@@ -55,7 +55,7 @@ class RFC2616CharacterRulesTest {
     }
 
     @Nested
-    class TokenCharTest extends GenericPredicate<RFC2616CharacterRules> {
+    class TokenCharTest extends GenericRuleTestSuite<RFC2616CharacterRules> {
         TokenCharTest() {
             super(
                     rules,
@@ -103,7 +103,7 @@ class RFC2616CharacterRulesTest {
     }
 
     @Nested
-    class IsSeparatorTest extends GenericPredicate<RFC2616CharacterRules> {
+    class IsSeparatorTest extends GenericRuleTestSuite<RFC2616CharacterRules> {
         IsSeparatorTest() {
             super(
                     rules,

@@ -7,22 +7,18 @@ import static java.util.Objects.requireNonNull;
  */
 public class Latin1Encoded {
     private final String text;
-    private final boolean isTransformed;
+    private final boolean withDoubleQuotes;
 
-    public Latin1Encoded(String text, boolean isTransformed) {
+    public Latin1Encoded(String text, boolean withDoubleQuotes) {
         this.text = requireNonNull(text);
-        this.isTransformed = isTransformed;
+        this.withDoubleQuotes = withDoubleQuotes;
     }
 
     public String getText() {
         return text;
     }
 
-    public boolean isTransformed() {
-        return isTransformed;
-    }
-
-    public boolean isOriginal() {
-        return !isTransformed;
+    public boolean isWithDoubleQuotes() {
+        return withDoubleQuotes;
     }
 }

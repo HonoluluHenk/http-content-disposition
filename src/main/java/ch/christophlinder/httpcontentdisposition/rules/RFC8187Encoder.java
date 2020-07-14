@@ -17,7 +17,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * FIXME: add some examples
  */
 public class RFC8187Encoder {
-    private static final RFC2231CharacterRules RFC_2231_CHARACTER_RULES = RFC2231CharacterRules.getInstance();
+    private static final RFC8187CharacterRules RFC_8187_CHARACTER_RULES = RFC8187CharacterRules.getInstance();
 
     /**
      * The length of one pct-encoded token (e.g.: "%FF") is three characters.
@@ -26,27 +26,26 @@ public class RFC8187Encoder {
      */
     private static final int PCT_ENCODED_LENGTH = 3;
 
-
     /**
      * pct-encode a string according to <a href="https://tools.ietf.org/html/rfc8187#section-3.2">RFC8187, Section 3.2</a>.
      */
-    public RFC8187Encoded encodeExtValue(String input, @Nullable Locale locale) {
+    public Encoded encodeExtValue(String input, @Nullable Locale locale) {
         String languageTag = parseLanguageTag(locale);
-        var encoded = pctEncode(input);
-        String valueChars = encoded.getValue();
+        var pctEncoded = pctEncode(input);
+        String valueChars = pctEncoded.getValue();
 
-        String value = "UTF-8" + "'" + languageTag + "'" + valueChars;
+        String value = String.format("UTF-8'%s'%s", languageTag, valueChars);
 
-        return new RFC8187Encoded(value, encoded.isEncoded());
+        return new Encoded(value, pctEncoded.isEncoded());
     }
 
-    public RFC8187Encoded encodeExtValue(String input) {
+    public Encoded encodeExtValue(String input) {
         return encodeExtValue(input, null);
     }
 
     public boolean needsEncoding(String input) {
         return input.codePoints()
-                .allMatch(this::isAllowedChar);
+                .allMatch(this::isAllowed);
     }
 
     private String parseLanguageTag(@Nullable Locale locale) {
@@ -54,12 +53,13 @@ public class RFC8187Encoder {
             return "";
         }
 
+        // main purpose: strip variants and extensions
         Locale clean = new Locale(locale.getLanguage(), locale.getCountry());
 
         return clean.toLanguageTag();
     }
 
-    private RFC8187Encoded pctEncode(String input) {
+    private Encoded pctEncode(String input) {
         int length = input.length();
 
         try (CharArrayWriter writer = new CharArrayWriter(calcEncodedLength(length))) {
@@ -70,7 +70,7 @@ public class RFC8187Encoder {
                 int codePoint = input.codePointAt(offset);
                 int charCount = Character.charCount(codePoint);
 
-                if (isAllowedChar(codePoint)) {
+                if (isAllowed(codePoint)) {
                     writer.append(input.substring(offset, offset + charCount));
                 } else {
                     writer.append(pctEncode(codePoint));
@@ -80,7 +80,7 @@ public class RFC8187Encoder {
                 offset += charCount;
             }
 
-            return new RFC8187Encoded(writer.toString(), isEncoded);
+            return new Encoded(writer.toString(), isEncoded);
         }
     }
 
@@ -95,8 +95,8 @@ public class RFC8187Encoder {
         return hex.toString().toUpperCase(Locale.US);
     }
 
-    private boolean isAllowedChar(int codePoint) {
-        return RFC_2231_CHARACTER_RULES.isAttributeChar(codePoint);
+    private boolean isAllowed(int codePoint) {
+        return RFC_8187_CHARACTER_RULES.isAttrChar(codePoint);
     }
 
     private int calcEncodedLength(int numChars) {

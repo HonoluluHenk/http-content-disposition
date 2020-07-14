@@ -14,11 +14,19 @@ class RFC2231CharacterRulesTest {
 
     @Nested
     @TestInstance(PER_CLASS)
-    class IsAttributeCharTest extends GenericPredicate<RFC2231CharacterRules> {
+    class IsAttributeCharTest extends GenericRuleTestSuite<RFC2231CharacterRules> {
         public IsAttributeCharTest() {
             super(
                     rules,
                     RFC2231CharacterRules::isAttributeChar,
+// FIXME: for use in RFC8187CharacterRules
+//                    concat(
+//                            charRange('a', 'z'),
+//                            charRange('A', 'Z'),
+//                            charRange('0', '9'),
+//                            chars('!', '#', '$', '&', '+', '-', '.',
+//                                    '^', '_', '`', '|', '~')
+//                    )
                     allExcept(
                             ascii(),
                             concat(

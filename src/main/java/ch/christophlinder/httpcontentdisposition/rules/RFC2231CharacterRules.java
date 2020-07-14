@@ -1,23 +1,10 @@
 package ch.christophlinder.httpcontentdisposition.rules;
 
-import java.util.Set;
+import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
+import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isOneOf;
 
 public class RFC2231CharacterRules {
     public static final RFC2231CharacterRules INSTANCE = new RFC2231CharacterRules();
-
-    /**
-     * RFC2045: tspecials :=
-     * "(" / ")" / "<" / ">" / "@" /
-     * "," / ";" / ":" / "\" / <">
-     * "/" / "[" / "]" / "?" / "="
-     */
-    private static final Set<Character> TSPECIALS = Set.of(
-            // SPACE (btw: tab also included in CTLs)
-            // "tspecials" defined in RFC2045
-            '(', ')', '<', '>', '@',
-            ',', ';', ':', '\\', '"',
-            '/', '[', ']', '?', '='
-    );
 
     public static RFC2231CharacterRules getInstance() {
         return INSTANCE;
@@ -36,21 +23,21 @@ public class RFC2231CharacterRules {
     }
 
     private boolean isAttributeCharForbidden(int codePoint) {
-        return codePoint == '*' || codePoint == '\'' || codePoint == '%';
+        return isOneOf(codePoint, '*', '\'', '%');
     }
 
     /**
      * RFC822: CHAR = <any ASCII character> ; (ASCII: 0-127)
      */
     private boolean isCHAR(int codePoint) {
-        return 0 <= codePoint && codePoint <= 127;
+        return isBetween(codePoint, 0, 127);
     }
 
     /**
      * RFC822: CTL <any ASCII control character and DEL> ; (ASCII char 0-31 and 127)
      */
     private boolean isCTL(int codePoint) {
-        return (0 <= codePoint && codePoint <= 31) || codePoint == 127;
+        return isBetween(codePoint, 0, 31) || codePoint == 127;
     }
 
     /**
@@ -70,6 +57,10 @@ public class RFC2231CharacterRules {
      */
     private boolean isTspecials(int codePoint) {
         // isCHAR implies values 0..127 and thus casting to char should produce no overflow
-        return isCHAR(codePoint) && TSPECIALS.contains((char) codePoint);
+        return isCHAR(codePoint)
+                && isOneOf(codePoint,
+                '(', ')', '<', '>', '@',
+                ',', ';', ':', '\\', '"',
+                '/', '[', ']', '?', '=');
     }
 }

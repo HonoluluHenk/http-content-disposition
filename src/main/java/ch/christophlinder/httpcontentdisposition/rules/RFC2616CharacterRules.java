@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 
+import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
+
 @ThreadSafe
 public class RFC2616CharacterRules {
 
@@ -81,8 +83,4 @@ public class RFC2616CharacterRules {
         return SEPARATOR_CHARS.contains(c);
     }
 
-    private boolean isBetween(int codePoint, int lowerBound, int upperBound) {
-        assert upperBound >= lowerBound : "Input must be lowerBound <= upperBound but was: " + lowerBound + "/" + upperBound;
-        return lowerBound <= codePoint && codePoint <= upperBound;
-    }
 }

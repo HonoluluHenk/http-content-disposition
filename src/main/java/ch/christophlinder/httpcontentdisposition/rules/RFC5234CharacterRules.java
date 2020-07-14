@@ -2,6 +2,8 @@ package ch.christophlinder.httpcontentdisposition.rules;
 
 import javax.annotation.concurrent.ThreadSafe;
 
+import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
+
 /**
  * Check if characters/character-sequences follow specific rules defined in <a href="https://tools.ietf.org/html/rfc5234#appendix-B.1">RFC5234, Appendix B.1</a>
  */
@@ -183,8 +185,4 @@ public class RFC5234CharacterRules {
         return isSP(c) || isHTAB(c);
     }
 
-    private boolean isBetween(int codePoint, int lowerBound, int upperBound) {
-        assert upperBound >= lowerBound : "Input must be lowerBound <= upperBound but was: " + lowerBound + "/" + upperBound;
-        return lowerBound <= codePoint && codePoint <= upperBound;
-    }
 }

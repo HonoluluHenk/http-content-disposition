@@ -35,7 +35,7 @@ class RFC5234CharacterRulesTest {
 
     @Nested
     @TestInstance(PER_CLASS)
-    class ALPHATest extends GenericPredicate<RFC5234CharacterRules> {
+    class ALPHATest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         ALPHATest() {
             super(rules,
                     RFC5234CharacterRules::isALPHA,
@@ -45,7 +45,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class BITTest extends GenericPredicate<RFC5234CharacterRules> {
+    class BITTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         BITTest() {
             super(rules,
                     RFC5234CharacterRules::isBIT,
@@ -55,7 +55,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class CHARTest extends GenericPredicate<RFC5234CharacterRules> {
+    class CHARTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         CHARTest() {
             super(rules,
                     RFC5234CharacterRules::isCHAR,
@@ -64,7 +64,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class CRTest extends GenericPredicate<RFC5234CharacterRules> {
+    class CRTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         CRTest() {
             super(
                     rules,
@@ -104,7 +104,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class CTLTest extends GenericPredicate<RFC5234CharacterRules> {
+    class CTLTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         CTLTest() {
             super(rules,
                     RFC5234CharacterRules::isCTL,
@@ -114,7 +114,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class DIGITTest extends GenericPredicate<RFC5234CharacterRules> {
+    class DIGITTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         DIGITTest() {
             super(rules,
                     RFC5234CharacterRules::isDIGIT,
@@ -124,7 +124,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class DQUOTETest extends GenericPredicate<RFC5234CharacterRules> {
+    class DQUOTETest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         DQUOTETest() {
             super(rules,
                     RFC5234CharacterRules::isDQUOTE,
@@ -134,7 +134,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class HEXDIGTest extends GenericPredicate<RFC5234CharacterRules> {
+    class HEXDIGTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         HEXDIGTest() {
             super(rules,
                     RFC5234CharacterRules::isHEXDIG,
@@ -144,7 +144,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class HTABTest extends GenericPredicate<RFC5234CharacterRules> {
+    class HTABTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         HTABTest() {
             super(rules,
                     RFC5234CharacterRules::isHTAB,
@@ -154,7 +154,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class LFTest extends GenericPredicate<RFC5234CharacterRules> {
+    class LFTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         LFTest() {
             super(rules,
                     RFC5234CharacterRules::isLF,
@@ -223,7 +223,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class OCTETTest extends GenericPredicate<RFC5234CharacterRules> {
+    class OCTETTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         OCTETTest() {
             super(rules,
                     RFC5234CharacterRules::isOCTET,
@@ -234,7 +234,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class SPTest extends GenericPredicate<RFC5234CharacterRules> {
+    class SPTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         SPTest() {
             super(rules,
                     RFC5234CharacterRules::isSP,
@@ -244,7 +244,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class VCHARTest extends GenericPredicate<RFC5234CharacterRules> {
+    class VCHARTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         VCHARTest() {
             super(rules,
                     RFC5234CharacterRules::isVCHAR,
@@ -254,7 +254,7 @@ class RFC5234CharacterRulesTest {
     }
 
     @Nested
-    class WSPTest extends GenericPredicate<RFC5234CharacterRules> {
+    class WSPTest extends GenericRuleTestSuite<RFC5234CharacterRules> {
         WSPTest() {
             super(rules,
                     RFC5234CharacterRules::isWSP,

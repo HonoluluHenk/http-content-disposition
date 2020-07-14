@@ -1,6 +1,7 @@
 package ch.christophlinder.httpcontentdisposition;
 
-import ch.christophlinder.httpcontentdisposition.internal.Latin1Encoded;
+import ch.christophlinder.httpcontentdisposition.rules.Encoded;
+import ch.christophlinder.httpcontentdisposition.rules.Latin1Encoder;
 import ch.christophlinder.httpcontentdisposition.rules.RFC8187Encoder;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -9,9 +10,13 @@ import java.util.Locale;
 import static java.util.Objects.requireNonNull;
 
 public class RFC6266ContentDisposition {
+    private final RFC8187Encoder rfc8187Encoder = new RFC8187Encoder();
 
+    /**
+     * Convenience: calls {@link #filename(Disposition, String, Locale)} with null locale.
+     */
     public String filename(Disposition disposition, String filename) {
-        return this.filename(disposition, filename, Locale.forLanguageTag(""));
+        return this.filename(disposition, filename, null);
     }
 
     /**
@@ -28,56 +33,46 @@ public class RFC6266ContentDisposition {
         requireNonNull(disposition, "disposition must be given");
         requireNonNull(filename, "filename must be given");
 
-        // FIXME: which RFC?
-        Latin1Encoded latin1Encoded = new Latin1Encoded("", false); //iso88591Strategy.encode(filename, locale);
-        var isoFilename = latin1Encoded.getText();
 
-        if (latin1Encoded.isTransformed()) {
-            // RFC5987
-            var encodedFilename = encodeRFC5987(filename, locale);
-            var result = formatBothIsoAndEncoded(disposition, isoFilename, encodedFilename, locale);
+        var latin1Encoded = new Latin1Encoder().encode(filename);
+        String latin1Quoted = quoteLatin1(latin1Encoded);
+
+        // FIXME: das reicht so nicht: was ist mit den ganzen Special Chars???
+        if (latin1Encoded.isEncoded()) {
+            var rfcEncoded = rfc8187Encoder.encodeExtValue(filename, locale);
+            var result = formatBothIsoAndEncoded(disposition, latin1Quoted, rfcEncoded.getValue());
 
             return result;
+
         } else {
-
-            var result = formatIsoOnly(disposition, isoFilename);
+            var result = formatLatin1Only(disposition, latin1Quoted);
 
             return result;
         }
 
     }
 
-    private String formatIsoOnly(Disposition disposition, String isoFilename) {
-        var result = String.format("%s; filename=%s", disposition.getHeaderAttribute(), isoFilename);
+    private String formatLatin1Only(Disposition disposition, String latin1Filename) {
+        var result = String.format("%s; filename=%s", disposition.getHeaderAttribute(), latin1Filename);
 
         return result;
     }
 
-    private String formatBothIsoAndEncoded(Disposition disposition, String isoFilename, String encodedFilename, Locale locale) {
-        var result = String.format("%s; filename=%s; filename*=%s",
-                disposition.getHeaderAttribute(), isoFilename, encodedFilename);
-
-        return result;
-    }
-
-    private String encodeRFC5987(String filename, @Nullable Locale locale) {
-        var encodedFilename = new RFC8187Encoder().encodeExtValue(filename);
-
-        final String languageTag = formatLanguageTag(locale);
-        var result = String.format("utf-8'%s'%s", languageTag, encodedFilename);
-
-        return result;
-    }
-
-    private String formatLanguageTag(@Nullable Locale locale) {
-        if (locale == null || locale.toString().equals("")) {
-            return "";
+    private String quoteLatin1(Encoded isoFilename) {
+        String input = isoFilename.getValue();
+        if (!input.contains("\"")) {
+            return input;
         }
 
-        var result = locale
-                .stripExtensions()
-                .toLanguageTag();
+        String quoted = input.replace("\"", "\\\"");
+        return '"' + quoted + '"';
+    }
+
+    private String formatBothIsoAndEncoded(Disposition disposition, String latin1Filename, String encodedFilename) {
+        var result = String.format("%s; filename=%s; filename*=%s",
+                disposition.getHeaderAttribute(), latin1Filename, encodedFilename);
 
         return result;
     }
+
 }
