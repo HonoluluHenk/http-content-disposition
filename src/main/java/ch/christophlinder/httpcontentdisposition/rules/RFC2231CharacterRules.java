@@ -1,7 +1,7 @@
 package ch.christophlinder.httpcontentdisposition.rules;
 
-import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
-import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isOneOf;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.isBetween;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.isOneOf;
 
 public class RFC2231CharacterRules {
     public static final RFC2231CharacterRules INSTANCE = new RFC2231CharacterRules();

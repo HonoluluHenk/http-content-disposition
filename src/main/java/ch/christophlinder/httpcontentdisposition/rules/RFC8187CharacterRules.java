@@ -1,7 +1,7 @@
 package ch.christophlinder.httpcontentdisposition.rules;
 
-import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
-import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isOneOf;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.isBetween;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.isOneOf;
 
 public class RFC8187CharacterRules {
 
@@ -14,7 +14,11 @@ public class RFC8187CharacterRules {
     public boolean isAttrChar(int codePoint) {
         return isALPHA(codePoint)
                 || isDIGIT(codePoint)
-                || isOneOf(codePoint,
+                || isAttrCharSpecial(codePoint);
+    }
+
+    private boolean isAttrCharSpecial(int codePoint) {
+        return isOneOf(codePoint,
                 '!', '#', '$', '&', '+', '-', '.',
                 '^', '_', '`', '|', '~');
     }

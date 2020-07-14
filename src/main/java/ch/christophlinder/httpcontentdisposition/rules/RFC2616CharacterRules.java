@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 
-import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.isBetween;
 
 @ThreadSafe
 public class RFC2616CharacterRules {

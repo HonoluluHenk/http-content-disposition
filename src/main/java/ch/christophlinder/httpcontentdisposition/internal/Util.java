@@ -1,7 +1,7 @@
 package ch.christophlinder.httpcontentdisposition.internal;
 
-public final class CharacterRules {
-    private CharacterRules() {
+public final class Util {
+    private Util() {
         // utility class
     }
 
@@ -19,4 +19,7 @@ public final class CharacterRules {
         return false;
     }
 
+    public static String trimToEmpty(String input) {
+        return input == null ? "" : input.trim();
+    }
 }

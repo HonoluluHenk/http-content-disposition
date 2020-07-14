@@ -2,7 +2,7 @@ package ch.christophlinder.httpcontentdisposition.rules;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-import static ch.christophlinder.httpcontentdisposition.internal.CharacterRules.isBetween;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.isBetween;
 
 /**
  * Check if characters/character-sequences follow specific rules defined in <a href="https://tools.ietf.org/html/rfc5234#appendix-B.1">RFC5234, Appendix B.1</a>

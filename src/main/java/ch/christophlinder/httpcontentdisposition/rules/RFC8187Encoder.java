@@ -43,9 +43,10 @@ public class RFC8187Encoder {
         return encodeExtValue(input, null);
     }
 
+    //FIXME: test!!!!
     public boolean needsEncoding(String input) {
         return input.codePoints()
-                .allMatch(this::isAllowed);
+                .anyMatch(cp -> !this.isAllowed(cp));
     }
 
     private String parseLanguageTag(@Nullable Locale locale) {
