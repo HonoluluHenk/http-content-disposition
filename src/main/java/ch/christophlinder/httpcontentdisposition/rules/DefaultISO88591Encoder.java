@@ -2,20 +2,22 @@ package ch.christophlinder.httpcontentdisposition.rules;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-import java.nio.charset.StandardCharsets;
+import javax.annotation.concurrent.ThreadSafe;
 
 import static ch.christophlinder.httpcontentdisposition.internal.Util.trimToEmpty;
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
+@ThreadSafe
 public class DefaultISO88591Encoder implements ISO88591Encoder {
 
+    private static final long serialVersionUID = -1059462257810038990L;
+
     @Override
-    public Encoded encode(@Nullable String input) {
+    public String encode(@Nullable String input) {
         String clean = trimToEmpty(input);
 
-        String encoded = new String(clean.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
-        boolean isEncoded = !encoded.equals(input);
+        String encoded = new String(clean.getBytes(ISO_8859_1), ISO_8859_1);
 
-        return new Encoded(encoded, isEncoded);
+        return encoded;
     }
-
 }

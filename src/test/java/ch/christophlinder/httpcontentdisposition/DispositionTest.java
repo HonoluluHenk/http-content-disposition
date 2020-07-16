@@ -1,5 +1,6 @@
 package ch.christophlinder.httpcontentdisposition;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,34 +19,38 @@ public class DispositionTest {
                 .isEqualTo("attachment");
     }
 
-    @Test
-    void fromTextShouldFindCaseInsensitive() {
-        assertAll(
-                () -> assertThat(Disposition.fromText("attachment")).hasValue(Disposition.ATTACHMENT),
-                () -> assertThat(Disposition.fromText("AtTaChMeNt")).hasValue(Disposition.ATTACHMENT),
-                () -> assertThat(Disposition.fromText("ATTACHMENT")).hasValue(Disposition.ATTACHMENT),
-                () -> assertThat(Disposition.fromText("inline")).hasValue(Disposition.INLINE),
-                () -> assertThat(Disposition.fromText("INLINE")).hasValue(Disposition.INLINE)
-        );
+    @Nested
+    class FromTextTest {
+        @Test
+        void shouldFindCaseInsensitive() {
+            assertAll(
+                    () -> assertThat(Disposition.fromText("attachment")).hasValue(Disposition.ATTACHMENT),
+                    () -> assertThat(Disposition.fromText("AtTaChMeNt")).hasValue(Disposition.ATTACHMENT),
+                    () -> assertThat(Disposition.fromText("ATTACHMENT")).hasValue(Disposition.ATTACHMENT),
+                    () -> assertThat(Disposition.fromText("inline")).hasValue(Disposition.INLINE),
+                    () -> assertThat(Disposition.fromText("INLINE")).hasValue(Disposition.INLINE)
+            );
+        }
+
+        @Test
+        void shouldBeLenientWithWhitespace() {
+            assertAll(
+                    () -> assertThat(Disposition.fromText("attachment ")).hasValue(Disposition.ATTACHMENT),
+                    () -> assertThat(Disposition.fromText(" attachment")).hasValue(Disposition.ATTACHMENT),
+                    () -> assertThat(Disposition.fromText("inline ")).hasValue(Disposition.INLINE),
+                    () -> assertThat(Disposition.fromText(" inline")).hasValue(Disposition.INLINE)
+            );
+        }
+
+        @Test
+        void shouldHandleIllegalArguments() {
+            assertAll(
+                    () -> assertThat(Disposition.fromText(null)).isEmpty(),
+                    () -> assertThat(Disposition.fromText("")).isEmpty(),
+                    () -> assertThat(Disposition.fromText("foobar")).isEmpty(),
+                    () -> assertThat(Disposition.fromText("foobar")).isEmpty()
+            );
+        }
     }
 
-    @Test
-    void fromTextShouldBeLenientWithWhitespace() {
-        assertAll(
-                () -> assertThat(Disposition.fromText("attachment ")).hasValue(Disposition.ATTACHMENT),
-                () -> assertThat(Disposition.fromText(" attachment")).hasValue(Disposition.ATTACHMENT),
-                () -> assertThat(Disposition.fromText("inline ")).hasValue(Disposition.INLINE),
-                () -> assertThat(Disposition.fromText(" inline")).hasValue(Disposition.INLINE)
-        );
-    }
-
-    @Test
-    void fromTextShouldHandleIllegalArguments() {
-        assertAll(
-                () -> assertThat(Disposition.fromText(null)).isEmpty(),
-                () -> assertThat(Disposition.fromText("")).isEmpty(),
-                () -> assertThat(Disposition.fromText("foobar")).isEmpty(),
-                () -> assertThat(Disposition.fromText("foobar")).isEmpty()
-        );
-    }
 }

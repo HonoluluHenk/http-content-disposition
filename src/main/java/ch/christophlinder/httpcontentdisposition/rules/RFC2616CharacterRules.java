@@ -52,19 +52,24 @@ public class RFC2616CharacterRules {
     /**
      * 1*&lt;any CHAR except CTLs or separators&gt;
      */
-    public boolean isToken(@Nullable CharSequence input) {
+    public boolean isToken(@Nullable String input) {
         if (input == null || input.length() == 0) {
             return false;
         }
 
-        return input.chars().allMatch(this::isTokenChar);
+        boolean result = input.codePoints()
+                .allMatch(this::isTokenChar);
+
+        return result;
     }
 
     /**
-     * One character as defined in {@link #isToken(CharSequence)}.
+     * One character as defined in {@link #isToken(String)}.
      */
     public boolean isTokenChar(int codePoint) {
-        return isCHAR(codePoint) && !isCTL(codePoint) && !isSeparator(codePoint);
+        boolean result = isCHAR(codePoint) && !isCTL(codePoint) && !isSeparator(codePoint);
+
+        return result;
     }
 
     /**
@@ -83,4 +88,10 @@ public class RFC2616CharacterRules {
         return SEPARATOR_CHARS.contains(c);
     }
 
+    /**
+     * token | quoted-string
+     */
+    public boolean isValue(String input) {
+        return isToken(input); // FIXME: implement: || isQuotedString(input);
+    }
 }

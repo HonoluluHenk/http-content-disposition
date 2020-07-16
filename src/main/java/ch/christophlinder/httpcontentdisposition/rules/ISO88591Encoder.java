@@ -1,6 +1,8 @@
 package ch.christophlinder.httpcontentdisposition.rules;
 
-public interface ISO88591Encoder {
+import java.io.Serializable;
 
-    Encoded encode(String input);
+public interface ISO88591Encoder extends Serializable {
+
+    String encode(String input);
 }
