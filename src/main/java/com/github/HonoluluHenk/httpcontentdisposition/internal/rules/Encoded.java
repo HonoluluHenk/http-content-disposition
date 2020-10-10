@@ -1,9 +1,11 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+@ThreadSafe
 public class Encoded {
     private final String value;
     private final boolean isEncoded;
@@ -19,7 +21,7 @@ public class Encoded {
 
     /**
      * Returns true if {@link #getValue()} is an encoded string.
-     *
+     * <p>
      * Returns false if the input did contain allowed chars only (i.e.: did not require any encoding).
      */
     public boolean isEncoded() {
@@ -28,7 +30,7 @@ public class Encoded {
 
     @Override
     public String toString() {
-        return "Result[" + isEncoded + "," + value + "]";
+        return "Encoded[" + isEncoded + "," + value + "]";
     }
 
     @Override

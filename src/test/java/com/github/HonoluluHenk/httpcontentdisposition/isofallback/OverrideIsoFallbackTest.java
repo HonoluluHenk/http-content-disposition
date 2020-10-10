@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FixedValueIsoFallbackTest {
+class OverrideIsoFallbackTest {
 
     @Test
     void foo() {
-        String actual = new FixedValueIsoFallback("foo")
-                .fromOriginal("bar");
+        String actual = new OverrideIsoFallback("foo")
+                .fallback("bar");
 
         assertThat(actual)
                 .isEqualTo("foo");

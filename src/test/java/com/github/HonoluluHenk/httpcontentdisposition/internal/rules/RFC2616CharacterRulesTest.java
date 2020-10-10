@@ -1,4 +1,4 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.junit.jupiter.api.Nested;

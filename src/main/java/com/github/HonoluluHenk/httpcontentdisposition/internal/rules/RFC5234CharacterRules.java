@@ -1,4 +1,4 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
 import com.github.HonoluluHenk.httpcontentdisposition.internal.Util;
 
@@ -8,7 +8,6 @@ import javax.annotation.concurrent.ThreadSafe;
  * Check if characters/character-sequences follow specific rules defined in <a href="https://tools.ietf.org/html/rfc5234#appendix-B.1">RFC5234, Appendix B.1</a>
  */
 @ThreadSafe
-@SuppressWarnings("unused") // this is a library module
 public class RFC5234CharacterRules {
 
     /**

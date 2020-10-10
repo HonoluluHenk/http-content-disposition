@@ -1,50 +1,56 @@
 package com.github.HonoluluHenk.httpcontentdisposition;
 
-import com.github.HonoluluHenk.httpcontentdisposition.doublequotes.DoubleQuotes;
-import com.github.HonoluluHenk.httpcontentdisposition.doublequotes.QuoteDoubleQuotes;
-import com.github.HonoluluHenk.httpcontentdisposition.isofallback.EncodingIsoFallback;
-import com.github.HonoluluHenk.httpcontentdisposition.isofallback.FixedValueIsoFallback;
+import com.github.HonoluluHenk.httpcontentdisposition.internal.rules.*;
+import com.github.HonoluluHenk.httpcontentdisposition.isofallback.EncodeIsoFallback;
 import com.github.HonoluluHenk.httpcontentdisposition.isofallback.IsoFallback;
-import com.github.HonoluluHenk.httpcontentdisposition.rules.DefaultISO88591Encoder;
-import com.github.HonoluluHenk.httpcontentdisposition.rules.Encoded;
-import com.github.HonoluluHenk.httpcontentdisposition.rules.RFC2616CharacterRules;
-import com.github.HonoluluHenk.httpcontentdisposition.rules.RFC8187Encoder;
+import com.github.HonoluluHenk.httpcontentdisposition.isofallback.OverrideIsoFallback;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import java.util.List;
 import java.util.Locale;
 
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
-public class RFC6266ContentDisposition {
+/**
+ * This class and its {@link #builder()} help creating a mostly <a href="">RFC 6266</a> compatible HTTP Content-Disposition header.
+ * <p>
+ * The difference between this implementation and the RFC is: the RFC requires either the old ISO-8859-1 attribute
+ * <b>or</b> the encoded extended attribute.
+ * This library provides - for much better compatibility with broken/old clients - both.
+ */
+public class HttpContentDisposition {
+    /**
+     * Convenience: "Content-Disposition"
+     */
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
-    private static final DefaultISO88591Encoder ISO_88591_ENCODER = new DefaultISO88591Encoder();
 
-    public static final String FILENAME_PARAM_NAME = "filename";
-
-    private final RFC8187Encoder rfc8187Encoder = new RFC8187Encoder();
-    private final RFC2616CharacterRules rfc2616CharacterRules = new RFC2616CharacterRules();
+    private static final RFC8187Encoder rfc8187Encoder = new RFC8187Encoder();
+    private static final RFC2616CharacterRules rfc2616CharacterRules = new RFC2616CharacterRules();
+    private static final ISO88591Encoder ISO_88591_ENCODER = new DefaultISO88591Encoder();
+    private static final String FILENAME_PARAM_NAME = "filename";
 
     private final Disposition disposition;
     private final String filename;
     private final IsoFallback isoFallback;
-    private final DoubleQuotes doubleQuotes;
     @Nullable
     private final Locale locale;
 
-    RFC6266ContentDisposition(
+    HttpContentDisposition(
             Disposition disposition,
             String filename,
             IsoFallback isoFallback,
-            DoubleQuotes doubleQuotes,
             @Nullable Locale locale
     ) {
         this.disposition = requireNonNull(disposition);
         this.filename = requireNonNull(filename);
         this.isoFallback = requireNonNull(isoFallback);
-        this.doubleQuotes = requireNonNull(doubleQuotes);
         this.locale = locale;
     }
 
+    /**
+     * Convenience: "Content-Disposition"
+     */
     public String headerName() {
         return CONTENT_DISPOSITION;
     }
@@ -52,15 +58,6 @@ public class RFC6266ContentDisposition {
     public String headerValue() {
         requireNonNull(disposition, "disposition must be given");
         requireNonNull(filename, "filename must be given");
-
-        //FIXME: implement using the IsoEncoder:
-        // get its value and transform using the DefaultIsoEncoder (just in case the user did not implement his stuff correctly)
-//
-//        String rawIso = this.isoFilename == null
-//                ? new DefaultISO88591Encoder().encode(filename).getValue()
-//                : this.isoFilename;
-//        String iso = doubleQuotes.handle(rawIso);
-
 
         if (valueNeedsEncoding()) {
             String result = formatBothIsoAndEncoded();
@@ -82,7 +79,6 @@ public class RFC6266ContentDisposition {
                 .allMatch(rfc2616CharacterRules::isOCTET);
 
         return !isIso;
-//        return !rfc2616CharacterRules.isToken(filename);
     }
 
 
@@ -90,34 +86,43 @@ public class RFC6266ContentDisposition {
         String value = buildEncodedAndQuotedIsoFilename();
 
         //TODO: not only filename but an Attribute-Map
-        String result = formatContentDisposition(new HeaderValue(FILENAME_PARAM_NAME, value));
+        String result = formatContentDisposition(singletonList(new HeaderValue(FILENAME_PARAM_NAME, value)));
 
         return result;
     }
 
     private String formatContentDisposition(
-            HeaderValue headerValue
+            List<HeaderValue> headerValues
     ) {
         StringBuilder sb = new StringBuilder();
         sb.append(disposition.getHeaderAttribute());
-        sb.append("; ");
-        sb.append(headerValue.getName()).append("=").append(headerValue.getIsoValue());
-        if (headerValue.getExtValue() != null) {
-            sb.append("; ");
-            sb.append(headerValue.getName()).append("*=").append(headerValue.getExtValue());
+        for (HeaderValue headerValue : headerValues) {
+            if (headerValue.getIsoValue() != null) {
+                sb.append("; ");
+                sb.append(headerValue.getName()).append("=").append(headerValue.getIsoValue());
+            }
+            if (headerValue.getExtValue() != null) {
+                sb.append("; ");
+                sb.append(headerValue.getName()).append("*=").append(headerValue.getExtValue());
+            }
         }
 
         return sb.toString();
     }
 
+    @Nullable
     private String buildEncodedAndQuotedIsoFilename() {
-        String isoFilename = isoFallback.fromOriginal(filename);
-        // make doubly sure the user of our library did not pass something illegal:
-        String surelyEncoded = ISO_88591_ENCODER.encode(isoFilename);
+        String isoFilename = isoFallback.fallback(filename);
+        if (isoFilename == null) {
+            return null;
+        }
 
-        //FIXME: do cleanup: remove CTLs
+        String actual = isoFilename;
+        if (isoFallback.needsEncoding()) {
+            actual = ISO_88591_ENCODER.encode(isoFilename);
+        }
 
-        String result = addQuotes(surelyEncoded);
+        String result = addQuotes(actual);
 
         return result;
     }
@@ -130,8 +135,6 @@ public class RFC6266ContentDisposition {
         String quoted = input.replace("\"", "\\\"");
 
         return '"' + quoted + '"';
-//
-//        return doubleQuotes.handle(encodedFilename);
     }
 
     private boolean isoValueNeedsQuoting(String input) {
@@ -143,7 +146,9 @@ public class RFC6266ContentDisposition {
         String isoEncoded = buildEncodedAndQuotedIsoFilename();
         Encoded rfcEncoded = rfc8187Encoder.encodeExtValue(filename, locale);
 
-        String result = formatContentDisposition(new HeaderValue(FILENAME_PARAM_NAME, isoEncoded, rfcEncoded.getValue()));
+        String result = formatContentDisposition(
+                singletonList(new HeaderValue(FILENAME_PARAM_NAME, isoEncoded, rfcEncoded.getValue()))
+        );
 
         return result;
     }
@@ -160,10 +165,6 @@ public class RFC6266ContentDisposition {
         return isoFallback;
     }
 
-    public DoubleQuotes getDoubleQuotes() {
-        return doubleQuotes;
-    }
-
     @Nullable
     public Locale getLocale() {
         return locale;
@@ -172,16 +173,18 @@ public class RFC6266ContentDisposition {
     private static class HeaderValue {
 
         private final String name;
+        @Nullable
         private final String isoValue;
-        @Nullable private final String extValue;
+        @Nullable
+        private final String extValue;
 
-        public HeaderValue(String name, String isoValue, @Nullable String extValue) {
+        public HeaderValue(String name, @Nullable String isoValue, @Nullable String extValue) {
             this.name = requireNonNull(name);
-            this.isoValue = requireNonNull(isoValue);
+            this.isoValue = isoValue;
             this.extValue = extValue;
         }
 
-        public HeaderValue(String name, String isoValue) {
+        public HeaderValue(String name, @Nullable String isoValue) {
             this(name, isoValue, null);
         }
 
@@ -189,6 +192,7 @@ public class RFC6266ContentDisposition {
             return name;
         }
 
+        @Nullable
         public String getIsoValue() {
             return isoValue;
         }
@@ -204,7 +208,6 @@ public class RFC6266ContentDisposition {
                 .disposition(this.getDisposition())
                 .filename(this.getFilename())
                 .isoFallback(this.getIsoFallback())
-                .doubleQuotes(this.getDoubleQuotes())
                 .locale(this.getLocale())
                 ;
     }
@@ -224,29 +227,24 @@ public class RFC6266ContentDisposition {
 
         Builder isoFallback(IsoFallback isoFallback);
 
-        Builder isoFallbackValue(String value);
+        Builder isoFallbackValue(@Nullable String value);
 
         IsoFallback getIsoFallback();
-
-        BuilderImpl doubleQuotes(DoubleQuotes doubleQuotes);
-
-        DoubleQuotes getDoubleQuotes();
 
         Builder locale(@Nullable Locale locale);
 
         @Nullable
         Locale getLocale();
 
-        RFC6266ContentDisposition build();
+        HttpContentDisposition build();
     }
 
     private static class BuilderImpl implements Builder {
         private Disposition disposition = Disposition.ATTACHMENT;
         private String filename = "filename.bin";
-        private IsoFallback isoFallback = new EncodingIsoFallback();
+        private IsoFallback isoFallback = new EncodeIsoFallback();
         @Nullable
         private Locale locale = null;
-        private DoubleQuotes doubleQuotes = new QuoteDoubleQuotes();
 
         @Override
         public Builder disposition(Disposition disposition) {
@@ -280,8 +278,8 @@ public class RFC6266ContentDisposition {
         }
 
         @Override
-        public Builder isoFallbackValue(String value) {
-            this.isoFallback = new FixedValueIsoFallback(value);
+        public Builder isoFallbackValue(@Nullable String value) {
+            this.isoFallback = new OverrideIsoFallback(value);
 
             return this;
         }
@@ -289,18 +287,6 @@ public class RFC6266ContentDisposition {
         @Override
         public IsoFallback getIsoFallback() {
             return isoFallback;
-        }
-
-        @Override
-        public BuilderImpl doubleQuotes(DoubleQuotes doubleQuotes) {
-            this.doubleQuotes = requireNonNull(doubleQuotes);
-
-            return this;
-        }
-
-        @Override
-        public DoubleQuotes getDoubleQuotes() {
-            return doubleQuotes;
         }
 
         @Override
@@ -317,12 +303,11 @@ public class RFC6266ContentDisposition {
         }
 
         @Override
-        public RFC6266ContentDisposition build() {
-            return new RFC6266ContentDisposition(
+        public HttpContentDisposition build() {
+            return new HttpContentDisposition(
                     disposition,
                     filename,
                     isoFallback,
-                    doubleQuotes,
                     locale
             );
         }

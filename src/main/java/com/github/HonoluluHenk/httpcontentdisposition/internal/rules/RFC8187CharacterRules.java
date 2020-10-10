@@ -1,7 +1,10 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
 import com.github.HonoluluHenk.httpcontentdisposition.internal.Util;
 
+import javax.annotation.concurrent.ThreadSafe;
+
+@ThreadSafe
 public class RFC8187CharacterRules {
 
     public static final RFC8187CharacterRules INSTANCE = new RFC8187CharacterRules();

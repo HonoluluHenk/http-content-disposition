@@ -1,4 +1,4 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
 import com.github.HonoluluHenk.httpcontentdisposition.helpers.CharInput;
 import org.junit.jupiter.api.Nested;
@@ -38,7 +38,7 @@ public class RFC8187EncoderTest {
     }
 
     @Nested
-    class IsEncodedTest {
+    class EncodedTest {
         @Test
         void shouldReturnFalseForSimpleChars() {
             Encoded actual = encoder.encodeExtValue("a");
@@ -53,6 +53,69 @@ public class RFC8187EncoderTest {
 
             assertThat(actual.isEncoded())
                     .isTrue();
+        }
+
+        @Nested
+        class HashcodeEqualsTest {
+            @ParameterizedTest
+            @CsvSource({
+                    "a, true, a, true, true",
+                    "a, true, a, false, false",
+                    "a, true, b, true, false",
+                    "a, true, a, false, false",
+            })
+            void shouldEqual(
+                    String valueA,
+                    boolean isEncodedA,
+                    String valueB,
+                    boolean isEncodedB,
+                    boolean expected
+            ) {
+                boolean actual = new Encoded(valueA, isEncodedA).equals(
+                        new Encoded(valueB, isEncodedB));
+
+                assertThat(actual)
+                        .isEqualTo(expected);
+            }
+
+            @Test
+            void same() {
+                Encoded a = new Encoded("foo", true);
+
+                //noinspection EqualsWithItself
+                boolean actual = a.equals(a);
+
+                assertThat(actual)
+                        .isTrue();
+            }
+
+            @Test
+            void classMissmatch() {
+                Encoded a = new Encoded("foo", true);
+
+                boolean actual = a.equals(new Object());
+
+                assertThat(actual)
+                        .isFalse();
+            }
+
+            @Test
+            void same_hashcode() {
+                int a = new Encoded("foo", true).hashCode();
+                int b = new Encoded("foo", true).hashCode();
+
+                assertThat(a)
+                        .isEqualTo(b);
+            }
+
+            @Test
+            void toStringStringyfies() {
+                String actual = new Encoded("foo", true).toString();
+
+                assertThat(actual)
+                        .isEqualTo("Encoded[true,foo]");
+
+            }
         }
     }
 

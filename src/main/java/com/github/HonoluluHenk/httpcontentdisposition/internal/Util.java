@@ -28,7 +28,7 @@ public final class Util {
     }
 
     @SafeVarargs
-    public static <T> Set<T> setOf(T...t) {
+    public static <T> Set<T> setOf(T... t) {
         Set<T> set = new LinkedHashSet<>(Arrays.asList(t));
 
         return set;

@@ -1,4 +1,4 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
@@ -89,10 +89,10 @@ public class RFC2616CharacterRules {
         return SEPARATOR_CHARS.contains(c);
     }
 
-    /**
-     * token | quoted-string
-     */
-    public boolean isValue(String input) {
-        return isToken(input); // FIXME: implement: || isQuotedString(input);
-    }
+//    /**
+//     * token | quoted-string
+//     */
+//    public boolean isValue(String input) {
+//        return isToken(input); // FIXME: implement: || isQuotedString(input);
+//    }
 }

@@ -1,7 +1,8 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.io.CharArrayWriter;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -14,8 +15,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * <a href="https://tools.ietf.org/html/rfc8187#section-3.2">RFC58187, Section 3.2
  * (Indicating Character Encoding and Language for HTTP Header Field Parameters)</a>.
  * <p>
- * FIXME: add some examples
  */
+@ThreadSafe
 public class RFC8187Encoder {
     private static final RFC8187CharacterRules RFC_8187_CHARACTER_RULES = RFC8187CharacterRules.getInstance();
 
@@ -41,12 +42,6 @@ public class RFC8187Encoder {
 
     public Encoded encodeExtValue(String input) {
         return encodeExtValue(input, null);
-    }
-
-    //FIXME: test!!!!
-    public boolean needsEncoding(String input) {
-        return input.codePoints()
-                .anyMatch(cp -> !this.isAllowed(cp));
     }
 
     private String parseLanguageTag(@Nullable Locale locale) {

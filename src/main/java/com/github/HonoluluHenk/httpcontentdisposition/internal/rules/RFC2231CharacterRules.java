@@ -1,8 +1,11 @@
-package com.github.HonoluluHenk.httpcontentdisposition.rules;
+package com.github.HonoluluHenk.httpcontentdisposition.internal.rules;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 import static com.github.HonoluluHenk.httpcontentdisposition.internal.Util.isBetween;
 import static com.github.HonoluluHenk.httpcontentdisposition.internal.Util.isOneOf;
 
+@ThreadSafe
 public class RFC2231CharacterRules {
     public static final RFC2231CharacterRules INSTANCE = new RFC2231CharacterRules();
 
