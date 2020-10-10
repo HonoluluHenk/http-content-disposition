@@ -4,7 +4,7 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>ch.christophlinder</groupId>
+	<groupId>com.github.HonoluluHenk</groupId>
 	<artifactId>http-content-disposition</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
