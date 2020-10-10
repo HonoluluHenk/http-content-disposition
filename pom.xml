@@ -6,7 +6,7 @@
 
 	<groupId>com.github.HonoluluHenk</groupId>
 	<artifactId>http-content-disposition</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 
 	<url>https://github.com/HonoluluHenk/http-content-disposition</url>
 
