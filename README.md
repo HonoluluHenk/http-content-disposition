@@ -1,17 +1,18 @@
 # http-content-disposition
 
-Implements generating a HTTP  `Content-Disposition` header conforming to [RFC 6266](https://tools.ietf.org/html/rfc6266).
+Implements generating a HTTP  `Content-Disposition` header conforming to [RFC 6266](https://tools.ietf.org/html/rfc6266) for the Java language.
 
+Other Java libraries do not adhere to the RFC 6266 standard 
+([JavaMail MimeUtility#encodeWord](https://javaee.github.io/javamail/docs/api/javax/mail/internet/MimeUtility.html) looks fine on first glance but ) 
+or come with huge dependency baggage 
+([Spring ContentDisposition](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ContentDisposition.html) comes to mind).
 
 
 # Background
 
 The Content-Disposition header was originally specified to only support a subset of characters of the [ISO-8859-1 character set](https://de.wikipedia.org/wiki/ISO_8859-1).
 
-Since most systems support more characters, RFC 6266 came into life to adapt some existing [old RFC used by emails](https://tools.ietf.org/html/rfc2183) to the world of HTTP.
-
-Before Unicode, only ISO-8859-1 was allowed for the header value. Nowadays, Unicode is ubiquitous. RFC 6266 also takes care of this fact but allows for backwards compatibility.
-
+Since most systems support more characters, RFC 6266 came into life to adapt some existing [old RFC used by emails](https://tools.ietf.org/html/rfc2183) to the world of HTTP and UTF-8.
 
 
 # Deviance from the RFC
@@ -26,7 +27,18 @@ This library provides both for a much improved compatibility with broken/old cli
 
 
 
-# Dependency
+# Maven/Gradle dependency
+This library is released as a maven artifact on [jitpack.io](https://jitpack.io).
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <name>jitpack.io-releases</name>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
 
 ```xml
 <dependency>
