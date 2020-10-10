@@ -13,7 +13,9 @@ import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 /**
- * This class and its {@link #builder()} help creating a mostly <a href="">RFC 6266</a> compatible HTTP Content-Disposition header.
+ * This class and its {@link #builder()} help creating a mostly
+ * <a href="https://tools.ietf.org/html/rfc6266">RFC 6266</a> compatible HTTP Content-Disposition header.
+ *
  * <p>
  * The difference between this implementation and the RFC is: the RFC requires either the old ISO-8859-1 attribute
  * <b>or</b> the encoded extended attribute.
