@@ -36,6 +36,7 @@ This library provides both for a much improved compatibility with broken/old cli
 </dependency>
 ```
 
+Available versions: see [releases].
 
 
 # Usage

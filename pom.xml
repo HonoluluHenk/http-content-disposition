@@ -30,6 +30,15 @@
 		</contributor>
 	</contributors>
 
+	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	<!-- Release howto:                        -->
+	<!-- bump version in pom.xml               -->
+	<!-- mvn clean verify                      -->
+	<!-- tag + push                            -->
+	<!-- Then trigger the build on jitpack.io: -->
+	<!-- mvn -Ptrigger-build                   -->
+	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -44,12 +53,22 @@
 			<!-- mainly for triggering the release build -->
 			<id>jitpack.io</id>
 			<name>jitpack.io-releases</name>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
 			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
+
+	<profiles>
+		<profile>
+			<id>trigger-build</id>
+			<build>
+				<defaultGoal>dependency:get</defaultGoal>
+			</build>
+
+			<properties>
+				<artifact>${project.groupId}:${project.artifactId}:${project.version}</artifact>
+			</properties>
+		</profile>
+	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
