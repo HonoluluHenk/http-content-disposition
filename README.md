@@ -36,7 +36,7 @@ This library provides both for a much improved compatibility with broken/old cli
 </dependency>
 ```
 
-Available versions: see [releases].
+Available versions: see [Github releases](https://github.com/HonoluluHenk/http-content-disposition/releases).
 
 
 # Usage
