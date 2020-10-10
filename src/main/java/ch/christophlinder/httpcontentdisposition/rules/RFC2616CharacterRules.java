@@ -5,6 +5,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 
 import static ch.christophlinder.httpcontentdisposition.internal.Util.isBetween;
+import static ch.christophlinder.httpcontentdisposition.internal.Util.setOf;
 
 @ThreadSafe
 public class RFC2616CharacterRules {
@@ -21,7 +22,7 @@ public class RFC2616CharacterRules {
         return INSTANCE;
     }
 
-    private static final Set<Character> SEPARATOR_CHARS = Set.of(
+    private static final Set<Character> SEPARATOR_CHARS = setOf(
             '(', ')', '<', '>', '@',
             ',', ';', ':', '\\', '\"',
             '/', '[', ']', '?', '=',

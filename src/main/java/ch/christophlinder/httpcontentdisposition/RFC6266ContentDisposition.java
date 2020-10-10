@@ -6,6 +6,7 @@ import ch.christophlinder.httpcontentdisposition.isofallback.EncodingIsoFallback
 import ch.christophlinder.httpcontentdisposition.isofallback.FixedValueIsoFallback;
 import ch.christophlinder.httpcontentdisposition.isofallback.IsoFallback;
 import ch.christophlinder.httpcontentdisposition.rules.DefaultISO88591Encoder;
+import ch.christophlinder.httpcontentdisposition.rules.Encoded;
 import ch.christophlinder.httpcontentdisposition.rules.RFC2616CharacterRules;
 import ch.christophlinder.httpcontentdisposition.rules.RFC8187Encoder;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -62,13 +63,13 @@ public class RFC6266ContentDisposition {
 
 
         if (valueNeedsEncoding()) {
-            var result = formatBothIsoAndEncoded();
+            String result = formatBothIsoAndEncoded();
 
             return result;
 
         } else {
 
-            var result = formatIsoOnly();
+            String result = formatIsoOnly();
 
             return result;
         }
@@ -139,8 +140,8 @@ public class RFC6266ContentDisposition {
 
 
     private String formatBothIsoAndEncoded() {
-        var isoEncoded = buildEncodedAndQuotedIsoFilename();
-        var rfcEncoded = rfc8187Encoder.encodeExtValue(filename, locale);
+        String isoEncoded = buildEncodedAndQuotedIsoFilename();
+        Encoded rfcEncoded = rfc8187Encoder.encodeExtValue(filename, locale);
 
         String result = formatContentDisposition(new HeaderValue(FILENAME_PARAM_NAME, isoEncoded, rfcEncoded.getValue()));
 

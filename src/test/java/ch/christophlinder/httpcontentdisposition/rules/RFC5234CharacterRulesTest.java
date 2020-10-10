@@ -94,7 +94,7 @@ class RFC5234CharacterRulesTest {
 
         @Test
         void charSequenceShouldCallBasicFunction() {
-            var rulesSpy = Mockito.spy(rules);
+            RFC5234CharacterRules rulesSpy = Mockito.spy(rules);
 
             rulesSpy.isCRLF("xy");
 

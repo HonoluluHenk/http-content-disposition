@@ -23,7 +23,7 @@ public class RFC8187EncoderTest {
 
     @Test
     void shouldHandleEmptyString() {
-        var actual = encoder.encodeExtValue("");
+        Encoded actual = encoder.encodeExtValue("");
 
         assertThat(actual)
                 .isEqualTo(new Encoded("UTF-8''", false));
@@ -31,7 +31,7 @@ public class RFC8187EncoderTest {
 
     @Test
     void shouldEscapeDoubleQuote() {
-        var actual = encoder.encodeExtValue("\"");
+        Encoded actual = encoder.encodeExtValue("\"");
 
         assertThat(actual)
                 .isEqualTo(new Encoded("UTF-8''%22", true));
@@ -41,7 +41,7 @@ public class RFC8187EncoderTest {
     class IsEncodedTest {
         @Test
         void shouldReturnFalseForSimpleChars() {
-            var actual = encoder.encodeExtValue("a");
+            Encoded actual = encoder.encodeExtValue("a");
 
             assertThat(actual.isEncoded())
                     .isFalse();
@@ -49,7 +49,7 @@ public class RFC8187EncoderTest {
 
         @Test
         void shouldReturnTrueorSimpleChars() {
-            var actual = encoder.encodeExtValue("ö");
+            Encoded actual = encoder.encodeExtValue("ö");
 
             assertThat(actual.isEncoded())
                     .isTrue();
@@ -132,7 +132,8 @@ public class RFC8187EncoderTest {
 
         @Test
         void shouldEncode4ByteUTFChar() {
-            String string = Character.toString(194564);
+//            String string = Character.toString(194564);
+            String string = new String(Character.toChars(194564));
 
             Encoded actual = encoder.encodeExtValue(string);
 

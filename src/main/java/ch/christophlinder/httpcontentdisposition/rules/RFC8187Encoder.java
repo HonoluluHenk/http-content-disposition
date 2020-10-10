@@ -31,7 +31,7 @@ public class RFC8187Encoder {
      */
     public Encoded encodeExtValue(String input, @Nullable Locale locale) {
         String languageTag = parseLanguageTag(locale);
-        var pctEncoded = pctEncode(input);
+        Encoded pctEncoded = pctEncode(input);
         String valueChars = pctEncoded.getValue();
 
         String value = String.format("UTF-8'%s'%s", languageTag, valueChars);

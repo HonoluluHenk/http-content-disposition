@@ -3,6 +3,8 @@ package ch.christophlinder.httpcontentdisposition.rules;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Set;
 
+import static ch.christophlinder.httpcontentdisposition.internal.Util.setOf;
+
 /**
  * Check if characters/character-sequences follow specific rules defined in <a href="https://tools.ietf.org/html/rfc5987#section-3.2">RFC5982, Section 3.2</a>
  */
@@ -24,7 +26,7 @@ public class RFC5987CharacterRules {
                    / "^" / "_" / "`" / "|" / "~"
                    ; token except ( "*" / "'" / "%" )
 	 */
-    private static final Set<Character> ATTR_CHAR_SPECIALS = Set.of(
+    private static final Set<Character> ATTR_CHAR_SPECIALS = setOf(
             '!', '#', '$', '&', '+', '-', '.',
             '^', '_', '`', '|', '~'
     );
