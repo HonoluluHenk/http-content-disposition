@@ -6,7 +6,29 @@
 
 	<groupId>com.github.HonoluluHenk</groupId>
 	<artifactId>http-content-disposition</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
+
+	<url>https://github.com/HonoluluHenk/http-content-disposition</url>
+
+	<licenses>
+		<license>
+			<name>LGPL-3.0-or-later</name>
+			<url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</connection>
+		<developerConnection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</developerConnection>
+		<url>https://github.com/HonoluluHenk/http-content-disposition</url>
+	</scm>
+
+	<contributors>
+		<contributor>
+			<name>Christoph Linder</name>
+			<email>http-content-disposition@elainemarley.homeip.net</email>
+		</contributor>
+	</contributors>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -16,6 +38,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
+
+	<repositories>
+		<repository>
+			<!-- mainly for triggering the release build -->
+			<id>jitpack.io</id>
+			<name>jitpack.io-releases</name>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
