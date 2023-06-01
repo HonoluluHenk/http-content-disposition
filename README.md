@@ -3,7 +3,7 @@
 Implements generating a HTTP  `Content-Disposition` header conforming to [RFC 6266](https://tools.ietf.org/html/rfc6266) for the Java language.
 
 Other Java libraries do not adhere to the RFC 6266 standard 
-([JavaMail MimeUtility#encodeWord](https://javaee.github.io/javamail/docs/api/javax/mail/internet/MimeUtility.html) looks fine on first glance but ) 
+([JavaMail MimeUtility#encodeWord](https://javaee.github.io/javamail/docs/api/javax/mail/internet/MimeUtility.html) looks fine on first glance but breaks for more esoteric UTF characters) 
 or come with huge dependency baggage 
 ([Spring ContentDisposition](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/ContentDisposition.html) comes to mind).
 
