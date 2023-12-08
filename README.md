@@ -104,4 +104,4 @@ HttpContentDisposition header = HttpContentDisposition.builder()
 
 GNU Lesser General Public License 3.0 ([LGPL-3.0](http://www.gnu.org/licenses/lgpl-3.0.html)) or later.
 
-See also: [LICENSE]
+See also: [LICENSE.txt](LICENSE.txt)
