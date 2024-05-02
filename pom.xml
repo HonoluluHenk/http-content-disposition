@@ -48,28 +48,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <!-- mainly for triggering the release build -->
-            <id>jitpack.io</id>
-            <name>jitpack.io-releases</name>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
-    <profiles>
-        <profile>
-            <id>trigger-build</id>
-            <build>
-                <defaultGoal>dependency:get</defaultGoal>
-            </build>
-
-            <properties>
-                <artifact>${project.groupId}:${project.artifactId}:${project.version}</artifact>
-            </properties>
-        </profile>
-    </profiles>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
