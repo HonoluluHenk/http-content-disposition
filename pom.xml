@@ -1,152 +1,160 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-		 xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.HonoluluHenk</groupId>
-	<artifactId>http-content-disposition</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+    <groupId>com.github.HonoluluHenk</groupId>
+    <artifactId>http-content-disposition</artifactId>
+    <version>1.0.2</version>
 
-	<url>https://github.com/HonoluluHenk/http-content-disposition</url>
+    <url>https://github.com/HonoluluHenk/http-content-disposition</url>
 
-	<licenses>
-		<license>
-			<name>LGPL-3.0-or-later</name>
-			<url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>LGPL-3.0-or-later</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</connection>
-		<developerConnection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</developerConnection>
-		<url>https://github.com/HonoluluHenk/http-content-disposition</url>
-	</scm>
+    <scm>
+        <connection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</connection>
+        <developerConnection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</developerConnection>
+        <url>https://github.com/HonoluluHenk/http-content-disposition</url>
+    </scm>
 
-	<contributors>
-		<contributor>
-			<name>Christoph Linder</name>
-			<email>http-content-disposition@elainemarley.homeip.net</email>
-		</contributor>
-	</contributors>
+    <contributors>
+        <contributor>
+            <name>Christoph Linder</name>
+            <email>http-content-disposition@elainemarley.homeip.net</email>
+        </contributor>
+    </contributors>
 
-	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-	<!-- Release howto:                        -->
-	<!-- bump version in pom.xml               -->
-	<!-- mvn clean verify                      -->
-	<!-- tag + push                            -->
-	<!-- Then trigger the build on jitpack.io: -->
-	<!-- mvn -Ptrigger-build                   -->
-	<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    <!-- Release howto:                        -->
+    <!-- bump version in pom.xml               -->
+    <!-- mvn clean verify                      -->
+    <!-- tag + push                            -->
+    <!-- Then trigger the build on jitpack.io: -->
+    <!-- mvn -Ptrigger-build                   -->
+    <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.parameters>true</maven.compiler.parameters>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
 
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-	<repositories>
-		<repository>
-			<!-- mainly for triggering the release build -->
-			<id>jitpack.io</id>
-			<name>jitpack.io-releases</name>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+    <distributionManagement>
+        <relocation>
+            <groupId>com.github.honoluluhenk</groupId>
+            <artifactId>http-content-disposition</artifactId>
+            <version>1.0.4</version>
+            <message>Jitpack is discontinued. Please use official releases from Maven Central</message>
+        </relocation>
+    </distributionManagement>
+    <repositories>
+        <repository>
+            <!-- mainly for triggering the release build -->
+            <id>jitpack.io</id>
+            <name>jitpack.io-releases</name>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
-	<profiles>
-		<profile>
-			<id>trigger-build</id>
-			<build>
-				<defaultGoal>dependency:get</defaultGoal>
-			</build>
+    <profiles>
+        <profile>
+            <id>trigger-build</id>
+            <build>
+                <defaultGoal>dependency:get</defaultGoal>
+            </build>
 
-			<properties>
-				<artifact>${project.groupId}:${project.artifactId}:${project.version}</artifact>
-			</properties>
-		</profile>
-	</profiles>
+            <properties>
+                <artifact>${project.groupId}:${project.artifactId}:${project.version}</artifact>
+            </properties>
+        </profile>
+    </profiles>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.junit</groupId>
-				<artifactId>junit-bom</artifactId>
-				<version>5.6.2</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.6.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.github.spotbugs</groupId>
-			<artifactId>spotbugs-annotations</artifactId>
-			<version>4.0.6</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.0.6</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.16.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>3.3.3</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-<!--			<plugin>-->
-<!--				&lt;!&ndash; see http://errorprone.info/docs/installation for instructions on how to use it from the IDE &ndash;&gt;-->
-<!--				<artifactId>maven-compiler-plugin</artifactId>-->
-<!--				<version>3.8.1</version>-->
-<!--				<configuration>-->
-<!--					<compilerArgs>-->
-<!--						<arg>-XDcompilePolicy=simple</arg>-->
-<!--						<arg>-Xplugin:ErrorProne</arg>-->
-<!--					</compilerArgs>-->
-<!--					<annotationProcessorPaths>-->
-<!--						<path>-->
-<!--							<groupId>com.google.errorprone</groupId>-->
-<!--							<artifactId>error_prone_core</artifactId>-->
-<!--							<version>2.4.0</version>-->
-<!--						</path>-->
-<!--					</annotationProcessorPaths>-->
-<!--				</configuration>-->
-<!--			</plugin>-->
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-			</plugin>
-		</plugins>
-	</build>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.16.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <!--			<plugin>-->
+            <!--				&lt;!&ndash; see http://errorprone.info/docs/installation for instructions on how to use it from the IDE &ndash;&gt;-->
+            <!--				<artifactId>maven-compiler-plugin</artifactId>-->
+            <!--				<version>3.8.1</version>-->
+            <!--				<configuration>-->
+            <!--					<compilerArgs>-->
+            <!--						<arg>-XDcompilePolicy=simple</arg>-->
+            <!--						<arg>-Xplugin:ErrorProne</arg>-->
+            <!--					</compilerArgs>-->
+            <!--					<annotationProcessorPaths>-->
+            <!--						<path>-->
+            <!--							<groupId>com.google.errorprone</groupId>-->
+            <!--							<artifactId>error_prone_core</artifactId>-->
+            <!--							<version>2.4.0</version>-->
+            <!--						</path>-->
+            <!--					</annotationProcessorPaths>-->
+            <!--				</configuration>-->
+            <!--			</plugin>-->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
