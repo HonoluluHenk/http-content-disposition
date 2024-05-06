@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.honoluluhenk</groupId>
     <artifactId>http-content-disposition</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>
@@ -24,7 +23,7 @@
         <connection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</connection>
         <developerConnection>scm:git:https://github.com/HonoluluHenk/http-content-disposition.git</developerConnection>
         <url>https://github.com/HonoluluHenk/http-content-disposition</url>
-        <tag>HEAD</tag>
+        <tag>v1.0.3</tag>
     </scm>
 
     <developers>
@@ -125,14 +124,14 @@
                         <phase>validate</phase>
                         <configuration>
                             <rules>
-                                <banDuplicatePomDependencyVersions/>
+                                <banDuplicatePomDependencyVersions />
                                 <banTransitiveDependencies>
                                     <excludes>
                                         <exclude>*:*:*:*:test</exclude>
                                         <eclude>com.github.spotbugs:spotbugs-annotations:jar</eclude>
                                     </excludes>
                                 </banTransitiveDependencies>
-                                <dependencyConvergence/>
+                                <dependencyConvergence />
                                 <requireJavaVersion>
                                     <version>8</version>
                                 </requireJavaVersion>
@@ -140,9 +139,9 @@
                                     <version>[3.9.5,)</version>
                                 </requireMavenVersion>
                                 <requirePluginVersions>
-                                    <banLatest/>
-                                    <banRelease/>
-                                    <banSnapshots/>
+                                    <banLatest />
+                                    <banRelease />
+                                    <banSnapshots />
                                     <unCheckedPluginList>org.apache.maven.plugins:maven-site-plugin
                                     </unCheckedPluginList>
                                 </requirePluginVersions>
